@@ -11,8 +11,8 @@ public class cross {
 	static ArrayList<Integer> crossCountList = new ArrayList<Integer>();
 	
 	public static void main(String[] args) throws IOException {
-		String fname = "D:\\GitHub\\algorithm\\01.CrossCount\\code\\java\\01.CrossCount\\cross.inp";
-		String outfname = "D:\\GitHub\\algorithm\\01.CrossCount\\code\\java\\01.CrossCount\\cross.out";
+		String fname = "cross.inp";
+		String outfname = "cross.out";
 		FileReader fr = new FileReader(fname);
 		ArrayList<FileData> FileList = FileSet(fr);
 		
@@ -57,8 +57,6 @@ public class cross {
 		for (int i = 0; i < crossCountList.size(); i++) {
 			str += "Case " + (i + 1) + ": " + crossCountList.get(i) + "\n";
 		}
-		
-		System.out.println(str);
 
 		bs.write(str.getBytes());
 		
@@ -83,14 +81,14 @@ public class cross {
 				arrS2[j] = Integer.parseInt(strS2[j]);
 			}
 			
-			for (int j = 0; j < strS1.length; j++) {	// S2 배열에서 요소의 위치 찾기
+			for (int j = 0; j < strS1.length; j++) {
 				for (int t = 0; t < strS1.length; t++) {
 					if (arrS1[j] == arrS2[t]) {
 						locate[j] = t;
 						break;
 					}
 				}
-			}	
+			}		
 			
 			for (int j = 0; j < strS1.length; j++) {
 				for (int t = j+1; t < strS1.length; t++) {
@@ -100,7 +98,6 @@ public class cross {
 				}
 			}
 			
-			// System.out.println("crossCount : " + crossCount);
 			crossCountList.add(crossCount);
 		}
 		
