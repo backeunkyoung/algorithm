@@ -9,21 +9,17 @@ class allocType {
 }
 
 class FileData {
-	int pointX;
-	int pointY;
-	int rightMove;
-	int upMove;
+	int x;
+	int y;
+	int w;
+	int h;
 	
 	int type;
 }
 
 public class paper {
-	static int maxSize = (10*10*10*10) + 1;
-	//static int[][] field = new int[maxSize][maxSize];
-	ArrayList<int[]> fieldY = new ArrayList<>();
-	int[] nums = new int[3];
-	
-	fieldY.add(nums);
+//	static int maxSize = (10*10*10*10) + 1;
+	//static int[][] field = new int[maxSize][maxSize]; 
 	
 //	fiedtY.add([0,1,0])
 //	fieldY[{0, 1, 2}, 1, 2, ]
@@ -36,9 +32,9 @@ public class paper {
 		
 		ArrayList<allocType> resultList = spaceAlloc(FileList);
 		
-		for (allocType print : resultList) {
-			System.out.println(print.allCovered + " " + print.partiallyCovered + " " + print.notCovered);
-		}
+//		for (allocType print : resultList) {
+//			System.out.println(print.allCovered + " " + print.partiallyCovered + " " + print.notCovered);
+//		}
 
 		//FilePrint(outfname, resultList);
 	}
@@ -66,10 +62,10 @@ public class paper {
 			int w = intArr[2];
 			int h = intArr[3];
 			
-			data.pointX = x;
-			data.pointY = y;
-			data.rightMove = w;
-			data.upMove = h;
+			data.x = x;
+			data.y = y;
+			data.w = w;
+			data.h = h;
 					
 			FileArray.add(data);
 			
@@ -109,60 +105,178 @@ public class paper {
 		ArrayList<Integer> resultList = new ArrayList<>();
 		ArrayList<allocType> resultType = new ArrayList<>();
 		
-		for (int i = FileList.size(); i > 0; i--) {	// n+1 ~ 1까지  할당(0이 디폴트 값이기 때문)
-			int nowPoint = i-1;
-			//System.out.println("i : " + i + ", start point :  " + FileList.get(nowPoint).startPoint);
-			int x = FileList.get(nowPoint).pointX;
-			int y = FileList.get(nowPoint).pointY;
-			int w = FileList.get(nowPoint).rightMove;
-			int h = FileList.get(nowPoint).upMove;
+		int maxSize = (10*10*10*10*10*10*10*10) + 1;
+		
+		//ArrayList<Integer> field = new ArrayList<>();
+		ArrayList<int[]> field = new ArrayList<>();
+		//ArrayList<int[]> spaceData = new ArrayList<>();
+		
+		ArrayList<Data> spaceData = new ArrayList<>();
+		
+//		for (FileData print : FileList) {
+//			System.out.println("x : " + print.x + ", y : " + print.y + ", w : " + print.w + ", h : " + print.h);
+//		}
+		
+		int size = FileList.size();
+		
+		for (int i = 0; i < size; i++) {
+			int y = FileList.get(i).y;
+			int h = FileList.get(i).h;
+			int x = FileList.get(i).x;
+			int xw = x + FileList.get(i).w;
+
+			spaceData.add(new Data(y, h, x, xw, i));
+		}
+		
+		Collections.sort(spaceData);	// y 오름차순 정렬
+		for (Data print : spaceData) {
+			System.out.println("y : " + print.y + ", h : " + print.h + ", x : " + print.x + ", xw : " + print.xw + ", num : " + print.num);
+		}
+		
+		int startY = spaceData.get(0).y;
+		int endY = spaceData.get(size-1).y;
+		
+		int preY = -1;	// 이전 h 값
+		
+		ArrayList<ArrayList <int []>> newData = new ArrayList<>();
+		ArrayList<int []> nowSpace = new ArrayList<>();
+		
+		int count = 0;
+		for (Data data : spaceData) {
+			count++;
 			
-//			System.out.println("\ni : " + i);
-//			System.out.println("x : " + x + ", y : " + y + " , w : " + w + " , h : " + h);
+			int nowY = data.y;
 			
-			int hEnd = y+h;
-			int wEnd = x+w;
+			int y = nowY;
+			int h = data.h;
+			int x = data.x;
+			int xw = data.xw;
+			int num = data.num;
 			
-			int AllocCount = 0; 
 			
-			FileList.get(nowPoint).type = 2;	// 안가림
-			for (int height = y; height < hEnd; height++) {
-				for (int width = x; width < wEnd; width++) {
-					if (field[width][height] == 0) {	// 해당 좌표 값이 비어있으면 할당
-						field[width][height] = i;
-						AllocCount++;
-					}
-					else {
-						FileList.get(nowPoint).type = 1;	// 부분 가림
-					}
+			if (preY != nowY) {
+				if (nowSpace.size() != 0) {
+					newData.add(nowSpace);
+					nowSpace = new ArrayList<>();
 				}
 			}
-			if (AllocCount == 0) {
-				FileList.get(nowPoint).type = 0;	// 전체 가림
-			}
+
+			int[] arr = {y, h, x, xw, num};
+			nowSpace.add(arr);
 			
-			resultList.add(FileList.get(nowPoint).type);
-		}
-		
-		System.out.println("resultList(역순 n번 부터~) : " + resultList);
-		
-		allocType count = new allocType();
-		
-		for (int i = 0; i < resultList.size(); i++) {
-			if (resultList.get(i) == 0) {
-				count.allCovered += 1;
-			}
-			else if (resultList.get(i) == 1) {
-				count.partiallyCovered += 1;
-			}
-			else if (resultList.get(i) == 2) {
-				count.notCovered += 1;		
+			preY = nowY;
+			
+			if (count == size) {
+				newData.add(nowSpace);
 			}
 		}
 		
-		resultType.add(count);
+		System.out.println("------------------------------");
+		for (int i = 0; i < newData.size(); i++) {
+			for (int j = 0; j < newData.get(i).size(); j++) {
+				for (int t = 0; t < 5; t++) {
+					System.out.print(newData.get(i).get(j)[t] + " ");
+				}
+				System.out.print(" , ");
+			}
+			System.out.println();
+		}
+		System.out.println("------------------------------");
+		
+//		for (int i = 0; i < newData.size(); i++) {
+//			for (int j = 0; j < newData.get(i).size()-1; j++) {
+//				System.out.println(newData.get(i).get(j)[2] + " " + newData.get(i).get(j+1)[1]);
+//				if (newData.get(i).get(j)[2] > newData.get(i).get(j+1)[1]) {
+//					System.out.println("중간에 있다(겹침)");
+//				}
+//			}
+//			System.out.println();
+//		}
+		
+
+//		for (int i = FileList.size(); i > 0; i--) {	// n+1 ~ 1까지  할당(0이 디폴트 값이기 때문)
+//			int nowPoint = i-1;
+//			//System.out.println("i : " + i + ", start point :  " + FileList.get(nowPoint).startPoint);
+//			int x = FileList.get(nowPoint).pointX;
+//			int y = FileList.get(nowPoint).pointY;
+//			int w = FileList.get(nowPoint).rightMove;
+//			int h = FileList.get(nowPoint).upMove;
+//			
+////			System.out.println("\ni : " + i);
+////			System.out.println("x : " + x + ", y : " + y + " , w : " + w + " , h : " + h);
+//			
+//			int hEnd = y+h;
+//			int wEnd = x+w;
+//			
+//			int AllocCount = 0; 
+//			
+//			FileList.get(nowPoint).type = 2;	// 안가림
+//			for (int height = y; height < hEnd; height++) {
+//				for (int width = x; width < wEnd; width++) {
+//					if (field[width][height] == 0) {	// 해당 좌표 값이 비어있으면 할당
+//						field[width][height] = i;
+//						AllocCount++;
+//					}
+//					else {
+//						FileList.get(nowPoint).type = 1;	// 부분 가림
+//					}
+//				}
+//			}
+//			if (AllocCount == 0) {
+//				FileList.get(nowPoint).type = 0;	// 전체 가림
+//			}
+//			
+//			resultList.add(FileList.get(nowPoint).type);
+//		}
+//		
+//		System.out.println("resultList(역순 n번 부터~) : " + resultList);
+//		
+//		allocType count = new allocType();
+//		
+//		for (int i = 0; i < resultList.size(); i++) {
+//			if (resultList.get(i) == 0) {
+//				count.allCovered += 1;
+//			}
+//			else if (resultList.get(i) == 1) {
+//				count.partiallyCovered += 1;
+//			}
+//			else if (resultList.get(i) == 2) {
+//				count.notCovered += 1;		
+//			}
+//		}
+//		
+//		resultType.add(count);
 		
 		return resultType;
+	}
+	
+	public static class Data implements Comparable<Data> {
+		private int y;
+		private int h;
+		private int x;
+		private int xw;
+		private int num;
+		
+		public Data(int y, int h, int x, int xw, int num) {
+			this.y = y;
+			this.h = h;
+			this.x = x;
+			this.xw = xw;
+			this.num = num;
+		}
+		
+		@Override
+		public int compareTo(Data data) {
+			if (data.y < y) {
+				return 1;
+			}
+			else if (data.y > y) {
+				return -1;
+			}
+			else {
+				return 0;
+			}
+		}
 	}
 	
 }
