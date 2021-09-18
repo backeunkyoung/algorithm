@@ -107,15 +107,9 @@ public class paper {
 		
 		int maxSize = (10*10*10*10*10*10*10*10) + 1;
 		
-		//ArrayList<Integer> field = new ArrayList<>();
-		ArrayList<int[]> field = new ArrayList<>();
-		//ArrayList<int[]> spaceData = new ArrayList<>();
+		//ArrayList<int[]> field = new ArrayList<>();
 		
 		ArrayList<Data> spaceData = new ArrayList<>();
-		
-//		for (FileData print : FileList) {
-//			System.out.println("x : " + print.x + ", y : " + print.y + ", w : " + print.w + ", h : " + print.h);
-//		}
 		
 		int size = FileList.size();
 		
@@ -171,6 +165,7 @@ public class paper {
 			}
 		}
 		
+		
 		System.out.println("------------------------------");
 		for (int i = 0; i < newData.size(); i++) {
 			for (int j = 0; j < newData.get(i).size(); j++) {
@@ -183,70 +178,30 @@ public class paper {
 		}
 		System.out.println("------------------------------");
 		
-//		for (int i = 0; i < newData.size(); i++) {
-//			for (int j = 0; j < newData.get(i).size()-1; j++) {
-//				System.out.println(newData.get(i).get(j)[2] + " " + newData.get(i).get(j+1)[1]);
-//				if (newData.get(i).get(j)[2] > newData.get(i).get(j+1)[1]) {
-//					System.out.println("중간에 있다(겹침)");
-//				}
-//			}
-//			System.out.println();
-//		}
+		System.out.println("startY : " + startY + " , endY : " + endY);
 		
+		System.out.println();
+		
+		ArrayList<int[]> field = new ArrayList<>();
+		int[] fieldData = new int[maxSize];
+		
+		for (int i = 0; i < newData.size(); i++) {
+			for (int j = 0; j < newData.get(i).size(); j++) {
+				int startT = newData.get(i).get(j)[0];
+				int endT = startT + newData.get(i).get(j)[1];
 
-//		for (int i = FileList.size(); i > 0; i--) {	// n+1 ~ 1까지  할당(0이 디폴트 값이기 때문)
-//			int nowPoint = i-1;
-//			//System.out.println("i : " + i + ", start point :  " + FileList.get(nowPoint).startPoint);
-//			int x = FileList.get(nowPoint).pointX;
-//			int y = FileList.get(nowPoint).pointY;
-//			int w = FileList.get(nowPoint).rightMove;
-//			int h = FileList.get(nowPoint).upMove;
-//			
-////			System.out.println("\ni : " + i);
-////			System.out.println("x : " + x + ", y : " + y + " , w : " + w + " , h : " + h);
-//			
-//			int hEnd = y+h;
-//			int wEnd = x+w;
-//			
-//			int AllocCount = 0; 
-//			
-//			FileList.get(nowPoint).type = 2;	// 안가림
-//			for (int height = y; height < hEnd; height++) {
-//				for (int width = x; width < wEnd; width++) {
-//					if (field[width][height] == 0) {	// 해당 좌표 값이 비어있으면 할당
-//						field[width][height] = i;
-//						AllocCount++;
-//					}
-//					else {
-//						FileList.get(nowPoint).type = 1;	// 부분 가림
-//					}
+				for (int t = newData.get(i).get(j)[0]; t < endT; t++) {
+					System.out.print(newData.get(i).get(j)[4] + " | ");
+				}
+				
+//				for (int t = 0; t < 5; t++) {
+//					System.out.print(newData.get(i).get(j)[t] + " ");
 //				}
-//			}
-//			if (AllocCount == 0) {
-//				FileList.get(nowPoint).type = 0;	// 전체 가림
-//			}
-//			
-//			resultList.add(FileList.get(nowPoint).type);
-//		}
-//		
-//		System.out.println("resultList(역순 n번 부터~) : " + resultList);
-//		
-//		allocType count = new allocType();
-//		
-//		for (int i = 0; i < resultList.size(); i++) {
-//			if (resultList.get(i) == 0) {
-//				count.allCovered += 1;
-//			}
-//			else if (resultList.get(i) == 1) {
-//				count.partiallyCovered += 1;
-//			}
-//			else if (resultList.get(i) == 2) {
-//				count.notCovered += 1;		
-//			}
-//		}
-//		
-//		resultType.add(count);
-		
+				System.out.println();
+			}
+			System.out.println("----------");
+		}
+	
 		return resultType;
 	}
 	
