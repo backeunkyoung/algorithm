@@ -103,9 +103,17 @@ public class calendar {
 		return resultList;
 	}
 	
-	public static long zeroCalc(String startDate, String endDate) {	// 연도-월-일, 연도-월-일
+	public static long zeroCalc(String oldStartDate, String oldEndDate) {	// 연도-월-일, 연도-월-일
 		long result = 0;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String[] startArray = oldStartDate.split("-");
+		String startDate = String.format("%04d-%02d-%02d", Integer.parseInt(startArray[0]), Integer.parseInt(startArray[1]), Integer.parseInt(startArray[2]));
+		
+		String[] endArray = oldEndDate.split("-");
+		String endDate = String.format("%04d-%02d-%02d", Integer.parseInt(endArray[0]), Integer.parseInt(endArray[1]), Integer.parseInt(endArray[2]));
+		
+		
 		
 		try {
 			boolean startState = dateCheck(startDate);
