@@ -114,7 +114,6 @@ public class calendar {
 		String endDate = String.format("%04d-%02d-%02d", Integer.parseInt(endArray[0]), Integer.parseInt(endArray[1]), Integer.parseInt(endArray[2]));
 		
 		
-		
 		try {
 			boolean startState = dateCheck(startDate);
 			boolean endState = dateCheck(endDate);
