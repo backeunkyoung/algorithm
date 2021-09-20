@@ -1,10 +1,12 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
-import java.text.DecimalFormat;
 
 class fileData {
 	int type;
@@ -24,7 +26,7 @@ public class calendar {
 		
 		//System.out.println("\nresultList : " + resultList);
 
-		//FilePrint(outfname, resultList);
+		FilePrint(outfname, resultList);
 	}
 	
 	public static ArrayList<fileData> FileSet(FileReader fr) throws IOException {
@@ -55,7 +57,7 @@ public class calendar {
 		return returnData;
 	}
 	
-	public static void FilePrint(String outfname, ArrayList<ArrayList<int[]>> resultList) throws IOException {
+	public static void FilePrint(String outfname, ArrayList<Long> resultList) throws IOException {
 		BufferedOutputStream bs = null;
 		bs = new BufferedOutputStream(new FileOutputStream(outfname));
 		String str = "";
@@ -63,13 +65,13 @@ public class calendar {
 		//System.out.println("resultList : " + resultList);
 		
 		for (int i = 0; i < resultList.size(); i++) {
-			//System.out.println(resultList.get(i));
+			System.out.println(resultList.get(i));
 			str += resultList.get(i) + "\n";
 		}
 		
-		System.out.println(str);
+		//System.out.println(str);
 
-		bs.write(str.getBytes());
+		//bs.write(str.getBytes());
 		
 		bs.close();
 	}
@@ -95,7 +97,7 @@ public class calendar {
 				result = threeCalc(data.startDate, data.endDate);
 			}
 			
-//			System.out.println("result : " + result);
+			//System.out.println(result);
 			resultList.add(result);
 		}
 
@@ -105,7 +107,6 @@ public class calendar {
 	
 	public static long zeroCalc(String oldStartDate, String oldEndDate) {	// 연도-월-일, 연도-월-일
 		long result = 0;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		
 		String[] startArray = oldStartDate.split("-");
 		String startDate = String.format("%04d-%02d-%02d", Integer.parseInt(startArray[0]), Integer.parseInt(startArray[1]), Integer.parseInt(startArray[2]));
@@ -119,18 +120,16 @@ public class calendar {
 			boolean endState = dateCheck(endDate);
 			
 			if (startState && endState) {
-				Date start = format.parse(startDate);
-				Date end = format.parse(endDate);
+				LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
+				LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
 				
-				//long diffSec = (start.getTime() - end.getTime()) / 1000;
-				long diffSec = (start.getTime() - end.getTime()) / 1000;
-				long diffDays = diffSec / (24*60*60);
+				long diffDays = ChronoUnit.DAYS.between(start, end);
 				diffDays = Math.abs(diffDays);
 				
-				System.out.println("---- type 0 ----");
-				System.out.println(startDate + " " + endDate);
-				System.out.println("차이 : " + diffDays);
-				System.out.println("--------");
+//				System.out.println("---- type 0 ----");
+//				System.out.println(startDate + " " + endDate);
+//				System.out.println("차이 : " + diffDays);
+//				System.out.println("--------");
 				
 				result = diffDays;
 			}
@@ -138,15 +137,20 @@ public class calendar {
 				result = -1;
 			}
 		}
-		catch(ParseException e) {
+		catch(DateTimeException e) {
 			
 		}
 		 
 		return result; 
 	}
-	public static long oneCalc(String startDate, String endDate) {	// 연도-월-일, 연도-월-횟수-요일
+	public static long oneCalc(String oldStartDate, String oldEndDate) {	// 연도-월-일, 연도-월-횟수-요일
 		long result = 0;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String[] startArray = oldStartDate.split("-");
+		String startDate = String.format("%04d-%02d-%02d", Integer.parseInt(startArray[0]), Integer.parseInt(startArray[1]), Integer.parseInt(startArray[2]));
+		
+		String[] endArray = oldEndDate.split("-");
+		String endDate = String.format("%04d-%02d-%02d", Integer.parseInt(endArray[0]), Integer.parseInt(endArray[1]), Integer.parseInt(endArray[2]));
 		
 		try {
 			String[] endStr = endDate.split("-");
@@ -199,14 +203,13 @@ public class calendar {
 			//System.out.println("startState : " + startState + " , endState : " + endState);
 			
 			if (startState && endState) {
-				Date start = format.parse(startDate);
-				Date end = format.parse(newEndDate);
+				LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
+				LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
 				
-				long diffSec = (start.getTime() - end.getTime()) / 1000;
-				long diffDays = diffSec / (24*60*60);
+				long diffDays = ChronoUnit.DAYS.between(start, end);
 				diffDays = Math.abs(diffDays);
 				
-//				System.out.println("---- type 0 ----");
+//				System.out.println("---- type 1 ----");
 //				System.out.println(startDate + " " + newEndDate);
 //				System.out.println("차이 : " + diffDays);
 //				System.out.println("--------");
@@ -218,15 +221,20 @@ public class calendar {
 			}
 			
 		}
-		catch(ParseException e) {
+		catch(DateTimeException e) {
 
 		}
 		 
 		return result; 
 	}
-	public static long twoCalc(String startDate, String endDate) {	// 연도-월-횟수-요일 , 연도-월-일
+	public static long twoCalc(String oldStartDate, String oldEndDate) {	// 연도-월-횟수-요일 , 연도-월-일
 		long result = 0;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String[] startArray = oldStartDate.split("-");
+		String startDate = String.format("%04d-%02d-%02d", Integer.parseInt(startArray[0]), Integer.parseInt(startArray[1]), Integer.parseInt(startArray[2]));
+		
+		String[] endArray = oldEndDate.split("-");
+		String endDate = String.format("%04d-%02d-%02d", Integer.parseInt(endArray[0]), Integer.parseInt(endArray[1]), Integer.parseInt(endArray[2]));
 		
 		try {
 			String[] startStr = startDate.split("-");
@@ -277,11 +285,10 @@ public class calendar {
 			//System.out.println("startState : " + startState + " , endState : " + endState);
 			
 			if (startState && endState) {
-				Date start = format.parse(newStartDate);
-				Date end = format.parse(endDate);
+				LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
+				LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
 				
-				long diffSec = (start.getTime() - end.getTime()) / 1000;
-				long diffDays = diffSec / (24*60*60);
+				long diffDays = ChronoUnit.DAYS.between(start, end);
 				diffDays = Math.abs(diffDays);
 				
 //				System.out.println("---- type 2 ----");
@@ -296,7 +303,7 @@ public class calendar {
 			}
 			
 		}
-		catch(ParseException e) {
+		catch(DateTimeException e) {
 
 		} 
 		
@@ -305,7 +312,6 @@ public class calendar {
 	}
 	public static long threeCalc(String startDate, String endDate) {	// 연도-월-횟수-요일 , 연도-월-횟수-요일
 		long result = 0;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		
 		try {
 			String[] startStr = startDate.split("-");
@@ -357,6 +363,8 @@ public class calendar {
 			String endDayOfWeek = endStr[3];
 			int endDay = 0;
 			
+			System.out.println("요일 : " + endStr[3]);
+			
 			if (endStr[3].equals("Sun")) { endDay = 1; }
 			else if (endStr[3].equals("Mon")) { endDay = 2; }
 			else if (endStr[3].equals("Tue")) { endDay = 3; }
@@ -384,9 +392,10 @@ public class calendar {
 				}
 			}
 			
+			System.out.println("endWeek : " + endWeek + " , dayCount2 : " + dayCount2);
 			if (endWeek <= dayCount2) {
 				endDay = dateList2.get(endWeek-1);
-				//System.out.println(endYear + "-" + endMonth + "-" + endDay);
+				System.out.println(endYear + "-" + endMonth + "-" + endDay);
 			}
 			else {
 				endDay = -1;
@@ -394,23 +403,31 @@ public class calendar {
 			
 			String newEndDate = endYear + "-" + endMonth + "-" + endDay;
 			
+			
+			String[] newStartArray = newStartDate.split("-");
+			newStartDate = String.format("%04d-%02d-%02d", Integer.parseInt(newStartArray[0]), Integer.parseInt(newStartArray[1]), Integer.parseInt(newStartArray[2]));
+			
+			String[] newEndArray = newEndDate.split("-");
+			System.out.println(newEndArray[0] + " " + newEndArray[1] + " " + newEndArray[2]);
+			newEndDate = String.format("%04d-%02d-%02d", Integer.parseInt(newEndArray[0]), Integer.parseInt(newEndArray[1]), Integer.parseInt(newEndArray[2]));
+			
 			boolean startState = dateCheck(newStartDate);
 			boolean endState = dateCheck(newEndDate);
 
 			//System.out.println("startState : " + startState + " , endState : " + endState);
 			
 			if (startState && endState) {
-				Date start = format.parse(newStartDate);
-				Date end = format.parse(newEndDate);
+				System.out.println("newStartDate : " + newStartDate + " , newEndDate : " + newEndDate);
+				LocalDate start = LocalDate.parse(newStartDate, DateTimeFormatter.ISO_DATE);
+				LocalDate end = LocalDate.parse(newEndDate, DateTimeFormatter.ISO_DATE);
 				
-				long diffSec = (start.getTime() - end.getTime()) / 1000;
-				long diffDays = diffSec / (24*60*60);
+				long diffDays = ChronoUnit.DAYS.between(start, end);
 				diffDays = Math.abs(diffDays);
 				
-//				System.out.println("---- type 3 ----");
-//				System.out.println(newStartDate + " " + newEndDate);
-//				System.out.println("차이 : " + diffDays);
-//				System.out.println("--------");
+				System.out.println("---- type 3 ----");
+				System.out.println(newStartDate + " " + newEndDate);
+				System.out.println("차이 : " + diffDays);
+				System.out.println("--------");
 				
 				result = diffDays;
 			}
@@ -419,8 +436,8 @@ public class calendar {
 			}
 			
 		}
-		catch(ParseException e) {
-
+		catch(DateTimeException e) {
+			System.out.println("에러");
 		}
 		
 		return result; 
