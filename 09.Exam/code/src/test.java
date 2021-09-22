@@ -1,7 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 class FileData {
 	String str;
@@ -73,62 +71,77 @@ public class test {
 			String text = "Test Case: #" + (i+1);
 			resultList.add(text);
 			
-			String[] goodStr = getData.get(i).str.split("");
-			ArrayList<String> goodChar = new ArrayList<String>(Arrays.asList(goodStr));
+			String goodChar = getData.get(i).str;
 			
-			String[] strP = getData.get(i).p.split("");
-			ArrayList<String> p = new ArrayList<>(Arrays.asList(strP));
+			String p = getData.get(i).p;
+			boolean starCheck = (p.indexOf('*') != -1);
 			
-			ArrayList<String> front = new ArrayList<>();
-			ArrayList<String> back = new ArrayList<>();
+			String front = p;
+			String back = "";
 			
-			boolean starExist = false;
-			if (p.contains("*")) {
-				starExist = true;
-				boolean division = false;
-				for (int t = 0; t < p.size(); t++) {
-					if (p.get(t).equals("*")) {
-						division = true;
-						continue;
-					}
-					
-					if (division) {
-						back.add(p.get(t));
-					}
-					else {
-						front.add(p.get(t));
-					}
-				}
+			if (starCheck) {
+				int starIndex = p.indexOf('*');
+				front = p.substring(0,starIndex);
+				back = p.substring(starIndex+1);
 			}
+			
+			//System.out.println("front and back : " + front + ", " + back);
 
 			int qNum = getData.get(i).qNum;
 			
 			for (int j = 0; j < qNum; j++) {
+				String q = getData.get(i).q.get(j);
+				int frontLen = front.length();
+				int backLen =  back.length();
+				int qLen = q.length();
 				boolean makeNo = false;
-				String[] strQ = getData.get(i).q.get(j).split("");
-				ArrayList<String> q = new ArrayList<>(Arrays.asList(strQ));
 				
-				if (starExist) {
-					ArrayList<Integer> removeIndex = new ArrayList<>();
+				String starString = q.substring(frontLen, qLen - backLen);
+				String qFront = q.substring(0, frontLen);
+				String qBack = q.substring(qLen - backLen);
+				
+				//System.out.println("³ª´«°Å È®ÀÎ : " + qFront + " / "  + starString + " / " + qBack);
+						
+				
+				for (int t = 0; t < frontLen; t++) {
+					char pChar = front.charAt(t);
+					char qChar = q.charAt(t);
 					
-					for (int t = 0; t < front.size(); t++) {
-						if (front.get(t).equals("?")) {
-							ArrayList<String> qChar = new ArrayList<>(Arrays.asList(q.get(t)));
+					if (pChar == '?') {
+						if (goodChar.indexOf(qChar) == -1) {
+							resultList.add("No");
+							makeNo = true;
+							break;
+						}
+					}
+					else {
+						if (pChar != qChar) {
+							resultList.add("No");
+							makeNo = true;
+							break;
+						}
+					}
+				}
+				
+				//System.out.println(" Front Check Make = " + !makeNo);
+				
+				if (!makeNo) {
+					
+					for (int t = 0; t < backLen; t++) {
+						char pChar = back.charAt(t);
+						char qChar = q.charAt(qLen - backLen + t);
 							
-							if (goodChar.containsAll(qChar)) {
-								removeIndex.add(t);
-							}
-							else {
+						
+						if (pChar == '?') {
+							
+							if (goodChar.indexOf(qChar) == -1) {
 								resultList.add("No");
 								makeNo = true;
 								break;
 							}
 						}
 						else {
-							if (p.get(t).equals(q.get(t))) {
-								removeIndex.add(t);
-							}
-							else {
+							if (pChar != qChar) {
 								resultList.add("No");
 								makeNo = true;
 								break;
@@ -136,91 +149,29 @@ public class test {
 						}
 					}
 					
-					if (!makeNo) {
-						int indexNum = q.size();
-						int count = 0;
-						for (int t = back.size()-1; t >= 0; t--) {
-							indexNum--;
-							count++;
-							int pIndexNum = p.size() - count;
-							
-							if (back.get(t).equals("?")) {
-								ArrayList<String> qChar = new ArrayList<>(Arrays.asList(q.get(indexNum)));
-
-								if (goodChar.containsAll(qChar)) {
-									removeIndex.add(indexNum);
-								}
-								else {
-									resultList.add("No");
-									makeNo = true;
-									break;
-								}
-							}
-							else {
-								if (p.get(pIndexNum).equals(q.get(indexNum))) {
-									removeIndex.add(indexNum);
-								}
-								else {
-									resultList.add("No");
-									break;
-								}
-							}
-						}
-						Collections.sort(removeIndex);
-					}
+					//System.out.println(" Back Check Make = " + !makeNo);
+				}
+				
+				if (!makeNo) {
+					//System.out.println("front : " + front + " , back : " + back);
+					int starLen = starString.length();
 					
-					if (!makeNo) {
-						while(true) {
-							if (removeIndex.size() == 0) {
-								break;
-							}
-							int removeNum = removeIndex.get(0);
-							q.set(removeIndex.get(0), "0");
-							removeIndex.remove(0);
-						}
-						
-						while(q.remove("0")) {};
-						
-						boolean starTrue = false;
-						if (q.size() == 0) {
-							starTrue = true;
-						}
-						for (int t = 0; t < q.size(); t++) {
-							ArrayList<String> starCheck = new ArrayList<>();
-							starCheck.add(q.get(t));
-
-							if (!(goodChar.containsAll(starCheck))) {
-								starTrue = true;
-								break;
-							}
-						}
-						
-						if (starTrue) {
+					if (starLen == 0) resultList.add("Yes");
+					
+					for (int t = 0; t < starLen; t++) {
+						char starChar = starString.charAt(t);
+						if (goodChar.indexOf(starChar) == -1) {
 							resultList.add("Yes");
+							break;
 						}
-						else {
+						
+						if (t == starLen - 1) {
 							resultList.add("No");
 						}
 					}
-					
 				}
-				else {
-					for (int t = 0; t < p.size(); t++) {
-						if (p.get(t).equals("?")) {
-							ArrayList<String> qChar = new ArrayList<>(Arrays.asList(q.get(t)));
-
-							if (goodChar.containsAll(qChar)) {
-								resultList.add("Yes");
-							}
-							else {
-								resultList.add("No");
-							}
-						}
-					}
-				}
-				
+				//System.out.println("q : " + q + ", resultList : " + resultList);
 			}
-			
 		}
 		
 		
