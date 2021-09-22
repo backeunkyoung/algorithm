@@ -66,6 +66,7 @@ public class calendar {
 		
 		//System.out.println("resultList : " + resultList);
 		
+		System.out.println("\n --- 파일 출력 ----");
 		for (int i = 0; i < resultList.size(); i++) {
 			System.out.println(resultList.get(i));
 			str += resultList.get(i) + "\n";
@@ -99,10 +100,8 @@ public class calendar {
 				result = threeCalc(data.startDate, data.endDate);
 			}
 			
-			//System.out.println(result);
 			resultList.add(result);
 		}
-
 		
 		return resultList;
 	}
@@ -116,7 +115,6 @@ public class calendar {
 		String[] endArray = oldEndDate.split("-");
 		String endDate = String.format("%04d-%02d-%02d", Integer.parseInt(endArray[0]), Integer.parseInt(endArray[1]), Integer.parseInt(endArray[2]));
 		
-		
 		try {
 			boolean startState = dateCheck(startDate);
 			boolean endState = dateCheck(endDate);
@@ -128,10 +126,11 @@ public class calendar {
 				long diffDays = ChronoUnit.DAYS.between(start, end);
 				diffDays = Math.abs(diffDays);
 				
-//				System.out.println("---- type 0 ----");
-//				System.out.println(startDate + " " + endDate);
-//				System.out.println("차이 : " + diffDays);
-//				System.out.println("--------");
+				System.out.println("---- type 0 ----");
+				System.out.println("startDate : " + startDate + " , endDate : " + endDate);
+				System.out.println("start : " + start + " , end : " + end);
+				System.out.println("차이 : " + diffDays);
+				System.out.println("--------");
 				
 				result = diffDays;
 			}
