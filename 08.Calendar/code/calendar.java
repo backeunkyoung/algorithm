@@ -18,14 +18,12 @@ class fileData {
 public class calendar {
 
 	public static void main(String[] args) throws IOException {
-		String fname = "D:\\GitHub\\algorithm\\08.Calendar\\code\\calendar.inp";
-		String outfname = "D:\\GitHub\\algorithm\\08.Calendar\\code\\calendar.out";
+		String fname = "calendar.inp";
+		String outfname = "calendar.out";
 		FileReader fr = new FileReader(fname);
 		ArrayList<fileData> data = FileSet(fr);
 
 		ArrayList<Long> resultList = calc(data);
-		
-		//System.out.println("\nresultList : " + resultList);
 
 		FilePrint(outfname, resultList);
 	}
@@ -62,15 +60,10 @@ public class calendar {
 		BufferedOutputStream bs = null;
 		bs = new BufferedOutputStream(new FileOutputStream(outfname));
 		String str = "";
-		
-		//System.out.println("resultList : " + resultList);
-		
-		System.out.println("\n --- 파일 출력 ----");
+
 		for (int i = 0; i < resultList.size(); i++) {
 			str += resultList.get(i) + "\n";
 		}
-		
-		System.out.println(str);
 
 		bs.write(str.getBytes());
 		
@@ -79,7 +72,6 @@ public class calendar {
 	
 	public static ArrayList<Long> calc(ArrayList<fileData> inputData) {
 		ArrayList<Long> resultList = new ArrayList<>();
-		
 		
 		for (fileData data : inputData) {
 			long result = 0;
@@ -96,14 +88,13 @@ public class calendar {
 			else if (data.type == 3) {
 				result = threeCalc(data.startDate, data.endDate);
 			}
-			
 			resultList.add(result);
 		}
 		
 		return resultList;
 	}
 	
-	public static long zeroCalc(String inputStartDate, String inputEndDate) {	// 연도-월-일, 연도-월-일
+	public static long zeroCalc(String inputStartDate, String inputEndDate) {
 		long result = 0;
 		
 		String[] startArray = inputStartDate.split("-");
@@ -131,7 +122,7 @@ public class calendar {
 		return result; 
 	}
 	
-	public static long oneCalc(String inputStartDate, String inputEndDate) {	// 연도-월-일, 연도-월-횟수-요일
+	public static long oneCalc(String inputStartDate, String inputEndDate) {
 		long result = 0;
 		
 		String[] startArray = inputStartDate.split("-");
@@ -139,7 +130,6 @@ public class calendar {
 		
 		try {	
 			String newEndDate = typeChange(inputEndDate);
-			System.out.println("newEndDate : " + newEndDate);
 			
 			boolean startState = dateCheck(startDate);
 			boolean endState = dateCheck(newEndDate);
@@ -160,21 +150,14 @@ public class calendar {
 		return result; 
 	}
 	
-	public static long twoCalc(String inputStartDate, String inputEndDate) {	// 연도-월-횟수-요일 , 연도-월-일
+	public static long twoCalc(String inputStartDate, String inputEndDate) {
 		long result = 0;
 		
 		String[] endArray = inputEndDate.split("-");
 		String endDate = String.format("%04d-%02d-%02d", Integer.parseInt(endArray[0]), Integer.parseInt(endArray[1]), Integer.parseInt(endArray[2]));
 		
-		try {
-			System.out.println("----------------------");
-			System.out.println("inputStartDate : " + inputStartDate);
-					
+		try {			
 			String newStartDate = typeChange(inputStartDate);
-			
-			System.out.println("newStartDate : " + newStartDate);
-			System.out.println("endDate : " + endDate);
-			System.out.println();
 
 			boolean startState = dateCheck(newStartDate);
 			boolean endState = dateCheck(endDate);
@@ -194,17 +177,12 @@ public class calendar {
 		return result; 
 	}
 	
-	public static long threeCalc(String inputStartDate, String inputEndDate) {	// 연도-월-횟수-요일 , 연도-월-횟수-요일
+	public static long threeCalc(String inputStartDate, String inputEndDate) {
 		long result = 0;
 		
 		try {
-			System.out.println("----------------------");
-			System.out.println("inputStartDate : " + inputStartDate + " , inputEndDate : " + inputEndDate);
-			
 			String newStartDate = typeChange(inputStartDate);
 			String newEndDate = typeChange(inputEndDate);
-
-			System.out.println("newStartDate : " + newStartDate + " , newEndDate : " + newEndDate);
 			
 			boolean startState = dateCheck(newStartDate);
 			boolean endState = dateCheck(newEndDate);
@@ -219,7 +197,7 @@ public class calendar {
 			
 		}
 		catch(DateTimeException e) {
-			System.out.println("에러");
+			
 		}
 		
 		return result; 
@@ -254,22 +232,15 @@ public class calendar {
 	 }
 	 
 	public static ArrayList<Integer> getdayNum(int monthOfLastDay, int year, int month, int day) {
-//		 System.out.println("year : " + year + " , month : " + month + " day(요일) : " + day);
-		 
-		 int count = 0;
 		 ArrayList<Integer> dateList = new ArrayList<>();
 		 for (int i = 1; i <= monthOfLastDay; i++) {
 			 LocalDate date = LocalDate.of(year, month, i);
 			 DayOfWeek dayOfWeek = date.getDayOfWeek();
 			 int iDay = (dayOfWeek.getValue()%7) + 1;
 			 if (day == iDay) {
-				 count++;
 				 dateList.add(i);
 			 }
 		 }
-		
-//		 System.out.println("dateList : " + dateList);
-		
 		 return dateList;
 	 }
 	
@@ -352,16 +323,9 @@ public class calendar {
 		LocalDate start = LocalDate.parse(newStartDate, DateTimeFormatter.ISO_DATE);
 		LocalDate end = LocalDate.parse(newEndDate, DateTimeFormatter.ISO_DATE);
 		
-		System.out.println("start : " + start + " , end : " + end);
-		
 		diffDays = ChronoUnit.DAYS.between(start, end);
 		diffDays = Math.abs(diffDays);
-		
-		System.out.println("---- type 3 ----");
-		System.out.println(newStartDate + " " + newEndDate);
-		System.out.println("차이 : " + diffDays);
-		System.out.println("--------");	
-		
+
 		return diffDays;
 	}
 }
