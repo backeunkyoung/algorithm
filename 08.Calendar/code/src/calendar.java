@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -346,21 +347,35 @@ public class calendar {
 		return newDate;
 	}
 	
-	public static long getDiffDays(String newStartDate, String newEndDate) {
+	public static long getDiffDays(String startDate, String endDate) {
 		long diffDays = 0;
 		
-		LocalDate start = LocalDate.parse(newStartDate, DateTimeFormatter.ISO_DATE);
-		LocalDate end = LocalDate.parse(newEndDate, DateTimeFormatter.ISO_DATE);
+//		LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
+//		LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
 		
-		System.out.println("start : " + start + " , end : " + end);
+		String strFormat = "yyyy-MM-dd";
+		SimpleDateFormat sdf = new SimpleDateFormat(strFormat);
 		
-		diffDays = ChronoUnit.DAYS.between(start, end);
-		diffDays = Math.abs(diffDays);
-		
-		System.out.println("---- type 3 ----");
-		System.out.println(newStartDate + " " + newEndDate);
-		System.out.println("차이 : " + diffDays);
-		System.out.println("--------");	
+		try {
+			Date start = sdf.parse(startDate);
+			Date end = sdf.parse(endDate);
+			
+			System.out.println("start : " + start + " , end : " + end);
+			
+			diffDays = (start.getTime() - end.getTime()) / (24*60*60*1000);
+			System.out.println("start.getTime() : " + start.getTime() / (24*60*60*1000) + " , end.getTime() : " + end.getTime() / (24*60*60*1000));
+			diffDays = Math.abs(diffDays);
+			
+//			diffDays = ChronoUnit.DAYS.between(start, end);
+//			diffDays = Math.abs(diffDays);
+			
+			System.out.println(startDate + " " + endDate);
+			System.out.println("차이 : " + diffDays);
+			System.out.println("--------");	
+		}
+		catch(ParseException e) {
+			
+		}
 		
 		return diffDays;
 	}

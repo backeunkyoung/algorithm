@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
@@ -22,84 +24,58 @@ public class family {
 		String str = "";
 		
 		for (int i = 0; i < arrayListSize; i++) {
-			Map<Integer, String> map = new HashMap<>();
+			Map<Integer, ArrayList<Integer>> map = new HashMap<>();
 			
 			int dataNum = Integer.parseInt(br_f.readLine());
 
-			String childList = "";
+			ArrayList<Integer> childList = new ArrayList<>();
+			ArrayList<Integer> rootKeyList = new ArrayList<>();
 			for (int j = 0; j < dataNum-1; j++) {
 				
 				String[] strArr = br_f.readLine().split(" "); // 3 5
 				Integer parent = Integer.valueOf(strArr[0]);
-				String child = (strArr[1]);
+				Integer child = Integer.parseInt(strArr[1]);
 				
 				if (map.get(parent) == null) {
-					map.put(parent, child);
+					map.put(parent, new ArrayList<>(Arrays.asList(child)));
 				} else {
-					String newChildList = map.get(parent);
-					newChildList += "," + child;
-					
+					ArrayList<Integer> newChildList = new ArrayList<>(map.get(parent));
+					newChildList.add(child);
 					map.put(parent, newChildList);
 				}
-				
-				childList += child + ",";
+				childList.add(child);
+				rootKeyList.add(parent);
 			}
-			
-			Integer root = 0;
-			Iterator<Integer> iter = map.keySet().iterator();
-			while(iter.hasNext()) {
-				Integer key = iter.next(); 
-				
-				String[] strArr = childList.split(",");
-				
-				boolean isRoot = true;
-				
-				for (int j = 0; j < strArr.length; j++) {
-					int nowKey = Integer.parseInt(strArr[j]);
+			rootKeyList.removeAll(childList);
+			int root = rootKeyList.get(0).intValue();
+			ArrayList<Integer> keyList = new ArrayList(Arrays.asList(root));
 					
-					if (key == nowKey) {
-						isRoot = false;
-						break;
-					}
-				}
-				
-				if (isRoot) {
-					root = key;
-				}
-			}
-			
-			String keyList = Integer.toString(root) + ",";
-			
 			int depth = 0;
 			while(true) {
-				String[] keyListArr = keyList.split(",");
-				String childArray = "";
-				
-				for (int t = 0; t < keyListArr.length ; t++) {
-					int key = Integer.parseInt(keyListArr[t]);
-					String nowChildList = map.get(key);
+				ArrayList<Integer> childArray = new ArrayList<>();
+				int keyLen = keyList.size();
+				for (int t=0; t< keyLen ; t++) {
+					ArrayList<Integer> nowChildList = map.get(keyList.get(t));
 					
 					if (nowChildList != null) {
-						
-						String[] nowChildListArr = nowChildList.split(",");
-						
-						for (int k = 0; k < nowChildListArr.length; k++) {
-							childArray += nowChildListArr[k] + ",";
+						int nowLen = nowChildList.size();
+						for (int k=0; k< nowLen ; k++) {
+							childArray.add(nowChildList.get(k));
 						}
 					}
 				}
 				keyList = childArray;
 				
 				depth++;
-				if (keyList == "") break;
+				if (keyList.size() == 0) break;
 			}
 			str += depth + "\n";
 
 		}
 		bs.write(str.getBytes());
-	
+
+		
 		br_f.close();
 		bs.close();
-	}
-	
+	}	
 }
