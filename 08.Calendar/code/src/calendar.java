@@ -20,7 +20,7 @@ public class calendar {
 
 	public static void main(String[] args) throws IOException {
 		String fname = "D:\\GitHub\\algorithm\\08.Calendar\\code\\calendar.inp";
-		String outfname = "D:\\GitHub\\algorithm\\08.Calendar\\code\\calendar.out";
+		String outfname = "D:\\GitHub\\algorithm\\08.Calendar\\code\\calendar2.out";
 		FileReader fr = new FileReader(fname);
 		ArrayList<fileData> data = FileSet(fr);
 
@@ -328,6 +328,7 @@ public class calendar {
 					min = tmp;
 				}
 				
+				System.out.println(inputDay + " " + min + " " + max);
 				if (inputDay < min || inputDay > max) {
 					inputDateNum = 99;
 				}
@@ -350,32 +351,32 @@ public class calendar {
 	public static long getDiffDays(String startDate, String endDate) {
 		long diffDays = 0;
 		
-//		LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
-//		LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
+		LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
+		LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
 		
 		String strFormat = "yyyy-MM-dd";
 		SimpleDateFormat sdf = new SimpleDateFormat(strFormat);
 		
-		try {
-			Date start = sdf.parse(startDate);
-			Date end = sdf.parse(endDate);
+//		try {
+//			Date start = sdf.parse(startDate);
+//			Date end = sdf.parse(endDate);
 			
 			System.out.println("start : " + start + " , end : " + end);
 			
-			diffDays = (start.getTime() - end.getTime()) / (24*60*60*1000);
-			System.out.println("start.getTime() : " + start.getTime() / (24*60*60*1000) + " , end.getTime() : " + end.getTime() / (24*60*60*1000));
-			diffDays = Math.abs(diffDays);
-			
-//			diffDays = ChronoUnit.DAYS.between(start, end);
+//			diffDays = (start.getTime() - end.getTime()) / (24*60*60*1000);
+//			System.out.println("start.getTime() : " + start.getTime() / (24*60*60*1000) + " , end.getTime() : " + end.getTime() / (24*60*60*1000));
 //			diffDays = Math.abs(diffDays);
+			
+			diffDays = ChronoUnit.DAYS.between(start, end);
+			diffDays = Math.abs(diffDays);
 			
 			System.out.println(startDate + " " + endDate);
 			System.out.println("Â÷ÀÌ : " + diffDays);
 			System.out.println("--------");	
-		}
-		catch(ParseException e) {
-			
-		}
+//		}
+//		catch(ParseException e) {
+//			
+//		}
 		
 		return diffDays;
 	}
