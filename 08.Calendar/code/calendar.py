@@ -99,8 +99,6 @@ def typeChange(year, month, count, dayOfWeek) :
 
     return newDate
         
-
-
 while True :
     line = str(rfile.readline()).strip()
 
@@ -167,7 +165,6 @@ while True :
     except :
         result = -1
         # print(-1)
-        # print("날짜 변환 에러")
         wfile.write("%s\n" % result)
 
 rfile.close()
