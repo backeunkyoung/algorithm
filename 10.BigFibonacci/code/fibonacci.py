@@ -1,35 +1,44 @@
 rfile = open("fibonacci.inp", "r")
 wfile = open("fibonacci.out", "w")
 
-def fibo(n):
-    SIZE = 2
-    ZERO = [[1, 0], [0, 1]]
-    BASE = [[1, 1], [1, 0]]
+def get_pisano_period(M) :
+    # 피사노 주기 구하기
+    M = int(M)
 
-    def square_matrix_mul(a, b, size=SIZE):
-        new = [[0 for _ in range(size)] for _ in range(size)]
+    # 첫 피보나치 값 설정
+    a = 0
+    b = 1
+    c = a + b
 
-        for i in range(size):
-            for j in range(size):
-                for k in range(size):
-                    new[i][j] += a[i][k] * b[k][j]
+    for i in range(M * M) :
+        c = (a + b) % M
+        a = b
+        b = c
 
-        return new
+        if a == 0 and b == 1 : return i + 1
 
-    def get_nth(n):
-        matrix = ZERO.copy()
-        k = 0
-        tmp = BASE.copy()
 
-        while 2 ** k <= n:
-            if n & (1 << k) != 0:
-                matrix = square_matrix_mul(matrix, tmp)
-            k += 1
-            tmp = square_matrix_mul(tmp, tmp)
+def get_fibonacci_huge(n, m, pisano) :
+    n = int(n)
+    m = int(m)
+    pisano = int(pisano)
 
-        return matrix
+    remainder = n % pisano
 
-    return get_nth(n)[1][0]
+    first = 0
+    second = 1
+
+    res = remainder
+
+    # no need to think about every calculation as we just need to know the very last digit
+    # using pisano period
+    for i in range(remainder) :
+        res = (first + second) % m
+        first = second
+        second = res
+
+    return res % m
+
 
 while True :
     line = str(rfile.readline()).strip()
@@ -37,21 +46,29 @@ while True :
     if line == "" : break
 
     for i in range(int(line)) :
+        print("-------------")
         line = str(rfile.readline()).strip()
 
         (fA, fB, fC, fD, M) = line.split(" ")
+        # print(fA, " ", fB, " ", fC, " ", fD, " ", M)
 
-        resultA = fibo(int(fA))
-        resultB = fibo(int(fB))
-        resultC = fibo(int(fC))
-        resultD = fibo(int(fD))
+        pisano = get_pisano_period(M)
+        # print("피사노 주기 : ", pisano)
 
-        # print(resultA, " ", resultB, " ", resultC, " ", resultD, " ", M)
+        resultA = get_fibonacci_huge(fA, M, pisano)
+        resultB = get_fibonacci_huge(fB, M, pisano)
+        resultC = get_fibonacci_huge(fC, M, pisano)
+        resultD = get_fibonacci_huge(fD, M, pisano)
+
+        print(resultA, " ", resultB, " ", resultC, " ", resultD, " ", M)
 
         M = int(M)
-        result = (((resultA * resultB) % M) + ((resultC * resultD) % M)) % M
-        print("result : ", result)
-        wfile.write("%s\n" % result)
+        print(((resultA * resultB) + (resultC * resultD)) % M)
+        # ((fa % m * fb % m ) % m + (fc %m * fd % m) % m ) % m
+        print("result : ", ( ((resultA * resultB) % M) + ((resultC * resultD) % M)) % M )
+        # result = (((resultA * resultB) % M) + ((resultC * resultD) % M)) % M
+        # print("result : ", result)
+        # wfile.write("%s\n" % result)
 
 rfile.close()
 wfile.close()
