@@ -2,10 +2,8 @@ rfile = open("fibonacci.inp", "r")
 wfile = open("fibonacci.out", "w")
 
 def get_pisano_period(M) :
-    # 피사노 주기 구하기
     M = int(M)
 
-    # 첫 피보나치 값 설정
     a = 0
     b = 1
     c = a + b
@@ -18,26 +16,65 @@ def get_pisano_period(M) :
         if a == 0 and b == 1 : return i + 1
 
 
-def get_fibonacci_huge(n, m, pisano) :
-    n = int(n)
+# def get_fibonacci_formula(n, m, pisano):
+#     n = int(n)
+#     m = int(m)
+
+#     n = n % pisano
+
+#     print(n, m, pisano)
+#     sqrt_5 = 5 ** (1/2)
+#     ans = 1 / sqrt_5 * ( ((1 + sqrt_5) / 2) ** n  - ((1 - sqrt_5) / 2) ** n )
+#     return int(ans) % m
+
+# def get_fibonacci_huge(n, m, pisano) :
+
+#     n = int(n)
+#     m = int(m)
+#     pisano = int(pisano)
+
+#     if n < 2 : return n
+#     remainder = n % pisano
+
+#     first = 0
+#     second = 1
+
+#     res = remainder
+
+#     for i in range(remainder - 1) :
+#         res = (first + second) % m
+#         first = second % m
+#         second = res % m
+
+#     return res
+
+
+def get_fibonacci_pisano(m, pisano) :
+
     m = int(m)
     pisano = int(pisano)
-
-    remainder = n % pisano
+    ret = {}
+    ret[0] = 0
+    ret[1] = 1
 
     first = 0
     second = 1
 
-    res = remainder
-
-    # no need to think about every calculation as we just need to know the very last digit
-    # using pisano period
-    for i in range(remainder) :
+    for i in range(pisano - 1) :
         res = (first + second) % m
-        first = second
+        first = second % m
         second = res
+        ret[i+2] = res
 
-    return res % m
+    return ret
+
+# pisano_period = get_fibonacci_pisano(3, 8)
+# print(pisano_period)
+
+# n = 10000000
+# print(pisano_period[n%3])
+# import sys
+# sys.exit(0)
 
 
 while True :
