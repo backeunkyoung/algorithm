@@ -1,4 +1,2 @@
 ﻿  addingways.cpp
-D:\GitHub\algorithm\13.AddingWays\code\13.AddingWays\13.AddingWays\addingways.cpp(36,9): warning C4101: 'k' :참조되지 않은 지역 변수입니다.
-D:\GitHub\algorithm\13.AddingWays\code\13.AddingWays\13.AddingWays\addingways.cpp(35,9): warning C4101: 'size' :참조되지 않은 지역 변수입니다.
   13.AddingWays.vcxproj -> D:\GitHub\algorithm\13.AddingWays\code\13.AddingWays\Debug\13.AddingWays.exe

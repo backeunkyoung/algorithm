@@ -3,7 +3,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <vector>
 using namespace std;
 
 int sum = 0;
@@ -32,9 +31,6 @@ int main() {
     readFile.open("addingways.inp");
     writeFile.open("addingways.out");
 
-    int size;
-    int k;
-
     while (true) {
 
         // --- file read ---
@@ -57,17 +53,13 @@ int main() {
             break;
         }
 
-        //cout << "--------------------" << endl;
+        cout << "--------------------" << endl;
         // --- file read end ---
 
-        
-        /*for (int i = 0; i < 2; i++) {
-            cout << "P( " << input[0] << ", " << input[1] << " )" << endl;
-        }*/
 
         calc(input[0], input[1]);
 
-        //cout << "sum : " << sum << endl;
+        cout << "sum : " << sum << endl;
 
         writeFile << sum << "\n";
 
