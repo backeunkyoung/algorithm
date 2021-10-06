@@ -7,21 +7,21 @@
 #include <map>
 using namespace std;
 
-void print_map(map<int, int>& m) {
-    for (map<int, int>::iterator itr = m.begin(); itr != m.end(); ++itr) {
-        cout << "key : " << itr->first << " , value : " << itr->second << endl;
-    }
-}
-
-void print_map_indexMap(map<int, vector<int>>& m) {
-    for (map<int, vector<int>>::iterator itr = m.begin(); itr != m.end(); ++itr) {
-        cout << "key : " << itr->first << " , value : ";
-        for (int i = 0; i < itr->second.size(); i++) {
-            cout << itr->second[i] << " ";
-        }
-        cout << endl;
-    }
-}
+//void print_map(map<int, int>& m) {
+//    for (map<int, int>::iterator itr = m.begin(); itr != m.end(); ++itr) {
+//        cout << "key : " << itr->first << " , value : " << itr->second << endl;
+//    }
+//}
+//
+//void print_map_indexMap(map<int, vector<int>>& m) {
+//    for (map<int, vector<int>>::iterator itr = m.begin(); itr != m.end(); ++itr) {
+//        cout << "key : " << itr->first << " , value : ";
+//        for (int i = 0; i < itr->second.size(); i++) {
+//            cout << itr->second[i] << " ";
+//        }
+//        cout << endl;
+//    }
+//}
 
 int main() {
 
@@ -38,11 +38,11 @@ int main() {
     int numOfCase = stoi(str);
 
     for (int i = 0; i < numOfCase; i++) {
-        cout << "-----------------" << endl;
+        //cout << "-----------------" << endl;
         
         getline(readFile, str);
         int n = stoi(str);
-        cout << "n : " << n << endl;
+        //cout << "n : " << n << endl;
 
         vector<int> arr;
 
@@ -66,22 +66,21 @@ int main() {
         map<int, vector<int>> indexMap;
 
         for (int j = 0; j < n; j++) {
-            cout << "----------------------------------------" << endl;
+            //cout << "----------------------------------------" << endl;
 
             int index = j;
-            int moveIndex = 0;
             int score = 0;
             //bool first = true;
 
-            cout << "index : " << index << endl;
+            //cout << "index : " << index << endl;
 
             int nowInt = arr[index];
 
             int nextIndex = nowInt + j;
-            cout << "nextIndex : " << nextIndex << endl;
+            //cout << "nextIndex : " << nextIndex << endl;
 
             score = nowInt;
-            cout << "score : " << score << endl;
+            //cout << "score : " << score << endl;
 
             scoreMap.insert({ index, score });
 
@@ -99,7 +98,10 @@ int main() {
             }
 
             if (indexMap[index].size() != 0) {
+                int newNextIndex = 0;
+
                 for (int t = 0; t < indexMap[index].size(); t++) {
+                    newNextIndex = index;
                     int newScore = 0;
                     int getIndex = indexMap[index][t];
 
@@ -107,20 +109,39 @@ int main() {
                     newScore += score;
 
                     scoreMap[getIndex] = newScore;
+
+                    newNextIndex += score;
+
+                    if (indexMap.count(newNextIndex) == 0) {
+                        vector<int> addInt = { getIndex };
+                        indexMap.insert(make_pair(newNextIndex, addInt));
+                    }
+                    else {
+                        vector<int> addInt = indexMap[newNextIndex];
+                        addInt.push_back(getIndex);
+                        indexMap[newNextIndex] = addInt;
+                    }
                 }
+
                 //cout << "scoreMap[" << index << "] : " << newScore << endl;
             }
         }
 
-        cout << "-- scoreMap --" << endl;
-        print_map(scoreMap);
+        /*cout << "-- scoreMap --" << endl;
+        print_map(scoreMap);*/
 
         
-        cout << "-- indexMap --" << endl;
-        print_map_indexMap(indexMap);
+        /*cout << "-- indexMap --" << endl;
+        print_map_indexMap(indexMap);*/
 
-        /*cout << "maxScore : " << maxScore << endl;
-        writeFile << maxScore << "\n";*/
+        for (map<int, int>::iterator itr = scoreMap.begin(); itr != scoreMap.end(); ++itr) {
+            if (maxScore < itr->second) {
+                maxScore = itr->second;
+            }
+        }
+
+        //cout << "maxScore : " << maxScore << endl;
+        writeFile << maxScore << "\n";
     }
 
     readFile.close();
