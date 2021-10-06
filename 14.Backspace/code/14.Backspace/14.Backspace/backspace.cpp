@@ -73,7 +73,6 @@ int main() {
     for (int i = 0; i < numOfCase; i++) {
         //cout << "-----------------" << endl;
 
-        string baseStr = "";
         string remainStr;
         string matchStr;
 
@@ -94,7 +93,6 @@ int main() {
         //cout << "\nresult : " << result << endl;
         
         writeFile << result << "\n";
-
 
     }
 
