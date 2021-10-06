@@ -4,7 +4,24 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <map>
 using namespace std;
+
+void print_map(map<int, int>& m) {
+    for (map<int, int>::iterator itr = m.begin(); itr != m.end(); ++itr) {
+        cout << "key : " << itr->first << " , value : " << itr->second << endl;
+    }
+}
+
+void print_map_indexMap(map<int, vector<int>>& m) {
+    for (map<int, vector<int>>::iterator itr = m.begin(); itr != m.end(); ++itr) {
+        cout << "key : " << itr->first << " , value : ";
+        for (int i = 0; i < itr->second.size(); i++) {
+            cout << itr->second[i] << " ";
+        }
+        cout << endl;
+    }
+}
 
 int main() {
 
@@ -21,17 +38,17 @@ int main() {
     int numOfCase = stoi(str);
 
     for (int i = 0; i < numOfCase; i++) {
-        //cout << "-----------------" << endl;
+        cout << "-----------------" << endl;
         
         getline(readFile, str);
         int n = stoi(str);
+        cout << "n : " << n << endl;
+
         vector<int> arr;
 
         getline(readFile, str);
         istringstream ss(str);
         string fragment;
-
-        int maxScore = 0;
 
         while (getline(ss, fragment, ' ')) {
             arr.push_back(stoi(fragment));
@@ -42,42 +59,68 @@ int main() {
         }
         cout << endl;*/
 
-        for (int j = 1; j <= n; j++) {
-            //cout << "---------------" << endl;
-            int index = j-1;
+        int maxScore = 0;
+
+        map<int, int> scoreMap;
+
+        map<int, vector<int>> indexMap;
+
+        for (int j = 0; j < n; j++) {
+            cout << "----------------------------------------" << endl;
+
+            int index = j;
             int moveIndex = 0;
             int score = 0;
-            bool first = true;
+            //bool first = true;
 
-            while (true) {
-                //cout << "index : " << index << endl;
+            cout << "index : " << index << endl;
 
-                if (index >= arr.size()) {
-                    break;
-                }
+            int nowInt = arr[index];
 
-                if (first) {
-                    moveIndex += j + arr[index];
-                    first = false;
+            int nextIndex = nowInt + j;
+            cout << "nextIndex : " << nextIndex << endl;
+
+            score = nowInt;
+            cout << "score : " << score << endl;
+
+            scoreMap.insert({ index, score });
+
+            if (nextIndex < n) {
+
+                if (indexMap.count(nextIndex) == 0) {
+                    vector<int> addInt = { index };
+                    indexMap.insert(make_pair(nextIndex, addInt));
                 }
                 else {
-                    moveIndex += arr[index];
+                    vector<int> addInt = indexMap[nextIndex];
+                    addInt.push_back(index);
+                    indexMap[nextIndex] = addInt;
+                }            
+            }
+
+            if (indexMap[index].size() != 0) {
+                for (int t = 0; t < indexMap[index].size(); t++) {
+                    int newScore = 0;
+                    int getIndex = indexMap[index][t];
+
+                    newScore += scoreMap[getIndex];
+                    newScore += score;
+
+                    scoreMap[getIndex] = newScore;
                 }
-
-                score += arr[index];
-                index += arr[index];
-
-                //cout << "nextIndex + 1 : " << moveIndex << endl;
-                //cout << "score : " << score << endl << endl;
-
-                if (maxScore < score) {
-                    maxScore = score;
-                }
+                //cout << "scoreMap[" << index << "] : " << newScore << endl;
             }
         }
 
-        //cout << "maxScore : " << maxScore << endl;
-        writeFile << maxScore << "\n";
+        cout << "-- scoreMap --" << endl;
+        print_map(scoreMap);
+
+        
+        cout << "-- indexMap --" << endl;
+        print_map_indexMap(indexMap);
+
+        /*cout << "maxScore : " << maxScore << endl;
+        writeFile << maxScore << "\n";*/
     }
 
     readFile.close();
