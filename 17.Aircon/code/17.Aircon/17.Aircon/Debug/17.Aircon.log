@@ -1,0 +1,3 @@
+﻿  aircon.cpp
+D:\GitHub\algorithm\17.Aircon\code\17.Aircon\17.Aircon\aircon.cpp(86,31): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  17.Aircon.vcxproj -> D:\GitHub\algorithm\17.Aircon\code\17.Aircon\Debug\17.Aircon.exe

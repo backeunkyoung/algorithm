@@ -1,3 +1,3 @@
 ﻿  jump.cpp
-D:\GitHub\algorithm\15.JumpGame\code\15.JumpGame\15.JumpGame\jump.cpp(103,35): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\GitHub\algorithm\15.JumpGame\code\15.JumpGame\15.JumpGame\jump.cpp(19,27): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   15.JumpGame.vcxproj -> D:\GitHub\algorithm\15.JumpGame\code\15.JumpGame\Debug\15.JumpGame.exe
