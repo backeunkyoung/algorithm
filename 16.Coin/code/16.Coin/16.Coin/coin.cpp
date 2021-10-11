@@ -82,8 +82,9 @@ int getScore(vector<vector<int>> coinData) {
     cout << endl;*/
 
     int minScore = INT_MAX;
+    int scoreListSize = scoreList.size();
 
-    for (int j = 0; j < scoreList.size(); j++) {
+    for (int j = 0; j < scoreListSize; j++) {
         if (minScore > scoreList[j]) {
             minScore = scoreList[j];
         }
@@ -107,7 +108,7 @@ int main() {
     int numOfCase = stoi(str);
 
     for (int i = 0; i < numOfCase; i++) {
-        //cout << "\n====================" << endl;
+        cout << "\n====================" << endl;
 
         vector<vector<int>> coinData;
 
@@ -115,7 +116,7 @@ int main() {
         int numOfColumn = stoi(str);
 
         if (numOfColumn == 1) {
-            //cout << "bestScore : " << 0 << endl;
+            cout << "bestScore : " << 0 << endl;
             writeFile << 0 << "\n";
             continue;
         }
@@ -136,7 +137,7 @@ int main() {
 
         int bestScore = getScore(coinData);
         
-        //cout << "bestScore : " << bestScore << endl;
+        cout << "bestScore : " << bestScore << endl;
         writeFile << bestScore << "\n";
     }
 
