@@ -9,17 +9,7 @@ using namespace std;
 
 int getScore(vector<vector<int>> coinData) {
     vector<int> scoreList;
-    vector<int> maxScoreList;
-
-    /*cout << " -- coinData --" << endl;
-    for (int j = 0; j < 2; j++) {
-        for (int k = 0; k < coinData[j].size(); k++) {
-            cout << coinData[j][k] << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;*/
-
+    
     int numOfColumn = coinData[0].size();
 
     for (int j = 0; j < numOfColumn; j++) {
@@ -108,7 +98,7 @@ int main() {
     int numOfCase = stoi(str);
 
     for (int i = 0; i < numOfCase; i++) {
-        cout << "\n====================" << endl;
+        //cout << "\n====================" << endl;
 
         vector<vector<int>> coinData;
 
@@ -116,7 +106,7 @@ int main() {
         int numOfColumn = stoi(str);
 
         if (numOfColumn == 1) {
-            cout << "bestScore : " << 0 << endl;
+            //cout << "bestScore : " << 0 << endl;
             writeFile << 0 << "\n";
             continue;
         }
@@ -137,7 +127,7 @@ int main() {
 
         int bestScore = getScore(coinData);
         
-        cout << "bestScore : " << bestScore << endl;
+        //cout << "bestScore : " << bestScore << endl;
         writeFile << bestScore << "\n";
     }
 

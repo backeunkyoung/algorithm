@@ -1,3 +1,5 @@
+// CPP program for the variation
+// in nim game
 #pragma warning(disable: 4996)
 #include <iostream>
 #include <fstream>
@@ -7,81 +9,80 @@
 #include <limits.h>
 using namespace std;
 
-string game(vector<int> bottleCoin) {
-    string result = "";
-    int lose = 0;
-    int win = 0;
+string misereNim(vector<int> s) {
+	/*for (int i = 0; i < s.size(); i++) {
+		cout << s[i] << " ";
+	}
+	cout << endl;*/
 
-    for (int i = 0; i < 3; i++) {
-        int N = bottleCoin[i];
+	int result = 0;
+	int one = 1;
+	int size = 0;
 
-        if (N == 0 || N == 1) {
-            lose += 1;
-            continue;
-        }
-        else {
-            int R = (N - 1) % 4;
-            if (R == 0) {
-                lose += 1;
-            }
-            else {
-                win += 1;
-            }
-        }
-    }
+	for (int i = 0; i < s.size(); ++i) {
+		int x = s[i] % 4;
+		result ^= x;
+		//one *= x;
 
-    cout << "lose : " << lose << ", win : " << win << endl;
+		//result ^= s[i];
+		if (x != 0) {
+			one *= x;
+			size++;
+		}
+	}
 
-    if (lose == 3 || lose == 1) {
-        result = "-1";
-    }
-    else {
-        result = "1";
-    }
+	if (one == 1) {
+		if ((size % 2) == 1) {
+			return "-1";
+		}
+		else {
+			return "1";
+		}
+	}
 
-    cout << result << endl;
-
-    return result;
+	if (result == 0)
+		return "-1";
+	else
+		return "1";
 }
 
 int main() {
+	ifstream readFile;
+	ofstream writeFile;
 
-    ifstream readFile;
-    ofstream writeFile;
+	readFile.open("coin.inp");
+	writeFile.open("coin.out");
 
-    readFile.open("coin.inp");
-    writeFile.open("coin.out");
+	string str;
 
-    string str;
+	getline(readFile, str);
 
-    getline(readFile, str);
+	int numOfCase = stoi(str);
 
-    int numOfCase = stoi(str);
+	for (int i = 0; i < numOfCase; i++) {
+		cout << "\n====================" << endl;
 
-    for (int i = 0; i < numOfCase; i++) {
-        cout << "\n====================" << endl;
+		vector<int> bottleCoin;
+		string fragment;
 
-        vector<int> bottleCoin;
-        string fragment;
+		getline(readFile, str);
+		istringstream ss(str);
 
-        getline(readFile, str);
-        istringstream ss(str);
+		while (getline(ss, fragment, ' ')) {
+			bottleCoin.push_back(stoi(fragment));
+		}
 
-        while (getline(ss, fragment, ' ')) {
-            bottleCoin.push_back(stoi(fragment));
-        }
+		string result = "(" + to_string(bottleCoin[0]) + " " + to_string(bottleCoin[1]) + " " + to_string(bottleCoin[2]) + ") : ";
 
-        string result = "(" + to_string(bottleCoin[0]) + " " + to_string(bottleCoin[1]) + " " + to_string(bottleCoin[2]) + ") : ";
-        cout << result << endl;
+		result += misereNim(bottleCoin);
 
-        result += game(bottleCoin);
-    
-        writeFile << result << "\n";
-    }
+		cout << result;
 
-    readFile.close();
-    writeFile.close();
+		writeFile << result << "\n";
+	}
 
-    return 0;
+	readFile.close();
+	writeFile.close();
 
+	return 0;
 }

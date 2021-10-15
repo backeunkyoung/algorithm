@@ -1,2 +1,3 @@
 ﻿  coin.cpp
+D:\GitHub\algorithm\18.CoinGame\code\18.CoinGame\18.CoinGame\coin.cpp(22,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   18.CoinGame.vcxproj -> D:\GitHub\algorithm\18.CoinGame\code\18.CoinGame\Debug\18.CoinGame.exe
