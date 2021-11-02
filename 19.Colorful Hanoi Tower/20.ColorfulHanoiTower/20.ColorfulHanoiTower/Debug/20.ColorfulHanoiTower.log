@@ -1,0 +1,5 @@
+﻿  test.cpp
+D:\GitHub\algorithm\19.Colorful Hanoi Tower\20.ColorfulHanoiTower\20.ColorfulHanoiTower\test.cpp(55,27): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\GitHub\algorithm\19.Colorful Hanoi Tower\20.ColorfulHanoiTower\20.ColorfulHanoiTower\test.cpp(61,27): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+D:\GitHub\algorithm\19.Colorful Hanoi Tower\20.ColorfulHanoiTower\20.ColorfulHanoiTower\test.cpp(67,27): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  20.ColorfulHanoiTower.vcxproj -> D:\GitHub\algorithm\19.Colorful Hanoi Tower\20.ColorfulHanoiTower\Debug\20.ColorfulHanoiTower.exe
