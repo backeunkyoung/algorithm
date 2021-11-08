@@ -1,0 +1,3 @@
+﻿  kruskal.cpp
+D:\GitHub\algorithm\22.Kruskal Algorithm\22.KruskalAltorithm\22.KruskalAltorithm\kruskal.cpp(40): warning C4715: 'findRoot': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  22.KruskalAltorithm.vcxproj -> D:\GitHub\algorithm\22.Kruskal Algorithm\22.KruskalAltorithm\Debug\22.KruskalAltorithm.exe
