@@ -5,6 +5,15 @@
 #include <vector>
 using namespace std;
 
+struct heap {
+	int self_id;
+	int parent_id;
+	int left_child_id;
+	int right_child_id;
+
+	heap(id, p_id, l_id, )
+};
+
 void heap(int* data, int num) {
 	for (int i = 1; i < num; i++) {
 

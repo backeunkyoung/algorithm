@@ -8,15 +8,13 @@
 using namespace std;
 
 vector<int> root;
-vector<vector<int>> mstData;
-vector<int> mst;
 
 bool compare(vector<int> a, vector<int> b) { // weight sort
-	if (a[2] == b[2]) {
-
+	if (a[3] == b[3]) {
+		return a[0] < b[0];
 	}
 
-	return a[2] < b[2];
+	return a[3] < b[3];
 }
 
 vector<vector<int>> asSort(vector<vector<int>> fileData) {
@@ -100,6 +98,9 @@ int main() {
 
 	for (int i = 0; i < numOfCase; i++) {
 		vector<int> split;
+
+		split.push_back(i);
+
 		string fragment;
 
 		getline(readFile, str);
@@ -121,32 +122,31 @@ int main() {
 
 	fileData = asSort(fileData);
 
-	int sum = 0;
-
-	for (int i = 0; i < numOfCase; i++) {
-		//싸이클이 존재하지 않으면 비용을 더합니다. 
-		if (!isCycle(fileData[i][0], fileData[i][1])) {
-			sum += fileData[i][2];
-			marge(fileData[i][0], fileData[i][1]);
-		}
-
-		/*cout << "------" << endl;
-
-		for (int j = 0; j < 3; j++) {
+	/*for (int i = 0; i < fileData.size(); i++) {
+		for (int j = 0; j < fileData[i].size(); j++) {
 			cout << fileData[i][j] << " ";
 		}
-		cout << endl;*/
+		cout << endl;
+	}*/
 
-		/*int start = fileData[i][0];
-		int end = fileData[i][1];
+	int mst = 0;
+	vector<int> F;
 
-		int p = findRoot(start);
-		int q = findRoot(end);
-
-		if (p != q) {
-			marge(p, q);
-			mstData.push_back(fileData[i]);
-		}*/
+	for (int i = 0; i < numOfCase; i++) {
+		if (!isCycle(fileData[i][1], fileData[i][2])) {
+			mst += fileData[i][3];
+			F.push_back(fileData[i][0]);
+			marge(fileData[i][1], fileData[i][2]);
+		}
 	}
-	printf("%d\n", sum);
+
+	//cout << mst << endl;
+	writeFile << mst << "\n";
+
+	int FSize = F.size();
+
+	for (int i = 0; i < FSize; i++) {
+		//cout << F[i] << endl;
+		writeFile << F[i] << endl;
+	}
 }
