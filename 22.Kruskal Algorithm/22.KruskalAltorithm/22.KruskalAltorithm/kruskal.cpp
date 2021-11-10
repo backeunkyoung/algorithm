@@ -149,4 +149,9 @@ int main() {
 		//cout << F[i] << endl;
 		writeFile << F[i] << endl;
 	}
+
+	readFile.close();
+	writeFile.close();
+
+	return 0;
 }
