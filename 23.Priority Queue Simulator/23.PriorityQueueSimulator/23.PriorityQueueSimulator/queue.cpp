@@ -90,12 +90,70 @@ void print_heap() {
 	cout << endl;
 }
 
+void secondAdjust(int index_id) {
+	int heapSize = heap.size();
+
+	Heap* current = &heap[index_id];
+
+	int left_index;
+	int right_index;
+
+	cout << "\nindex_id : " << index_id << endl;
+	cout << "heapSize : " << heapSize << endl;
+
+	if (2 * index_id + 1 >= heapSize) {	// left_index is no exist
+		return;
+	}
+	else {
+		left_index = current->getLeft();
+
+		if (2 * index_id + 2 > heapSize) {	// right_index is no exist
+			if (current->key < heap[left_index].key) {
+				int tmp = current->key;
+				current->key = heap[left_index].key;
+				heap[left_index].key = tmp;
+			}
+			secondAdjust(left_index);
+		}
+		else {
+			right_index = current->getRight();
+			if (current->key < heap[left_index].key) {
+
+				if (left_index < heap[right_index].key) {
+					int tmp = current->key;
+					current->key = heap[right_index].key;
+					heap[right_index].key = tmp;
+					secondAdjust(right_index);
+				}
+				else {
+					int tmp = current->key;
+					current->key = heap[left_index].key;
+					heap[left_index].key = tmp;
+					secondAdjust(left_index);
+				}
+			}
+			else if (current->key < heap[right_index].key){
+				int tmp = current->key;
+				current->key = heap[right_index].key;
+				heap[right_index].key = tmp;
+				secondAdjust(right_index);
+			}
+			else {
+				return;
+			}
+
+		}
+	}
+
+	
+}
+
 void adjust(int heapSize) {
 	int index_id = heapSize-1;
 
 	while (true) {
-		cout << " -------- start -----------" << endl;
-		cout << "index_id : " << index_id << endl << endl;
+		cout << " -------- D start -----------" << endl;
+		//cout << "index_id : " << index_id << endl << endl;
 
 		print_heap();
 
@@ -149,6 +207,11 @@ void adjust(int heapSize) {
 		cout << "--  1차 정렬 완료  --" << endl;
 		print_heap();
 
+		secondAdjust(max_index);
+
+		cout << "--  2차 정렬 완료  --" << endl;
+		print_heap();
+
 		index_id = parent->index_id;
 	}
 }
@@ -191,7 +254,6 @@ int main(void) {
 			return 0;
 		}
 		else if (str == "d") {
-			cout << " -- D -- " << endl;
 			del();
 		}
 
