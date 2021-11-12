@@ -9,7 +9,6 @@ struct Heap {
 	int index_id;
 	int key;
 
-	// 생성자
 	Heap(int index_id, int key) :
 	index_id(index_id), key(key) {}
 
@@ -68,152 +67,96 @@ void insert(int index_id, int key) {
 	
 }
 
-void print_heap() {
+string print_heap() {
+	string str = "";
+
 	int heapSize = heap.size();
 
 	int index_id = 0; // start Point
 
-	/*while (true) {
+	while (true) {
 		Heap current = heap[index_id];
 
-		cout << current.key << endl;
+		//cout << current.key << " ";
+		
+		str += to_string(current.key) + " ";
+
 		index_id = current.getLeft();
 
-		if (index_id >= heapSize - 1) {
+		if (index_id > heapSize - 1) {
 			break;
 		}
-	}*/
+	}
+	//cout << endl;
 
-	for (int i = 0; i < heapSize; i++) {
+	/*for (int i = 0; i < heapSize; i++) {
 		cout << heap[i].index_id << " " << heap[i].key << " " << heap[i].getParent() << " " << heap[i].getLeft() << " " << heap[i].getRight() << endl;
 	}
-	cout << endl;
+	cout << endl;*/
+
+	return str;
 }
 
-void secondAdjust(int index_id) {
-	int heapSize = heap.size();
-
-	Heap* current = &heap[index_id];
-
-	int left_index;
-	int right_index;
-
-	cout << "\nindex_id : " << index_id << endl;
-	cout << "heapSize : " << heapSize << endl;
-
-	if (2 * index_id + 1 >= heapSize) {	// left_index is no exist
-		return;
+int* get_max(int root_index) {
+	int max_index = 0;
+	int max_key = 0;
+	int* arr = new int[2];
+	arr[0] = -1;
+	arr[1] = -1;
+	
+	if (root_index > heap.size() - 1) {
+		return arr;
 	}
-	else {
-		left_index = current->getLeft();
+	Heap root = heap[root_index];
+	
+	int* left = get_max(root.getLeft());
+	int* right = get_max(root.getRight());
 
-		if (2 * index_id + 2 > heapSize) {	// right_index is no exist
-			if (current->key < heap[left_index].key) {
-				int tmp = current->key;
-				current->key = heap[left_index].key;
-				heap[left_index].key = tmp;
-			}
-			secondAdjust(left_index);
-		}
-		else {
-			right_index = current->getRight();
-			if (current->key < heap[left_index].key) {
+	int left_index = left[0];
+	int right_index = right[0];
 
-				if (left_index < heap[right_index].key) {
-					int tmp = current->key;
-					current->key = heap[right_index].key;
-					heap[right_index].key = tmp;
-					secondAdjust(right_index);
-				}
-				else {
-					int tmp = current->key;
-					current->key = heap[left_index].key;
-					heap[left_index].key = tmp;
-					secondAdjust(left_index);
-				}
-			}
-			else if (current->key < heap[right_index].key){
-				int tmp = current->key;
-				current->key = heap[right_index].key;
-				heap[right_index].key = tmp;
-				secondAdjust(right_index);
-			}
-			else {
-				return;
-			}
-
-		}
-	}
+	int cur_key = root.key;
+	int left_key = (left_index == -1) ? -1: left[1];
+	int right_key = (right_index == -1) ? -1 : right[1];
 
 	
+	if (cur_key < left_key) {
+		max_key = left_key;
+		max_index = left_index;
+	}
+	else {
+		max_key = cur_key;
+		max_index = root_index;
+	}
+
+	if (max_key < right_key) {
+		max_key = right_key;
+		max_index = right_index;
+	}
+
+	arr[0] = max_index;
+	arr[1] = max_key;
+
+	return arr;
 }
 
 void adjust(int heapSize) {
-	int index_id = heapSize-1;
 
-	while (true) {
-		cout << " -------- D start -----------" << endl;
-		//cout << "index_id : " << index_id << endl << endl;
+	int start_index = 0;
+	for (int i = 0; i < heap.size() - 1; i++) {
+		int* max_info = get_max(i);
+		int max_index = max_info[0];
+		int max_key = max_info[1];
 
-		print_heap();
+		Heap* root = &heap[i];
+		Heap* swap = &heap[max_index];
 
-		if (index_id <= 0) {
-			break;
-		}
+		swap->key = root->key;
+		root->key = max_key;
 
-		Heap* current = &heap[index_id];
-		Heap* parent = &heap[current->getParent()];
-
-		int max_index = -1;
-
-		int left_index = parent->getLeft();
-		int right_index;
-		if (2 * index_id + 2 > heapSize-1) {
-			right_index = -1;
-		}
-		else {
-			right_index = parent->getRight();
-		}		
-
-		/*cout << "parent_index : " << parent->index_id << " , key : " << parent->key << endl;
-		cout << "left_index : " << left_index << ", left_key : " << heap[left_index].key << endl;
-		cout << "right_index : " << right_index << ", right_index : " << heap[right_index].key << endl << endl;*/
-		
-		if (right_index == -1) {	// right_index is no exist
-			if (heap[left_index].key > parent->key) {
-				max_index = left_index;
-			}
-			else {
-				max_index = parent->index_id;
-			}
-		}
-		else {
-			if (heap[left_index].key > heap[right_index].key) {
-				max_index = left_index;
-			}
-			else {
-				max_index = right_index;
-			}
-
-			if (parent->key > heap[max_index].key) {
-				max_index = parent->index_id;
-			}
-		}
-
-		int tmp = parent->key;
-		parent->key = heap[max_index].key;
-		heap[max_index].key = tmp;
-
-		cout << "--  1차 정렬 완료  --" << endl;
-		print_heap();
-
-		secondAdjust(max_index);
-
-		cout << "--  2차 정렬 완료  --" << endl;
-		print_heap();
-
-		index_id = parent->index_id;
+		//cout << "max_index : " << max_index << ", max_key : " << max_key << endl;
 	}
+
 }
 
 void del() {
@@ -224,13 +167,6 @@ void del() {
 	heap.erase(heap.end()-1);
 
 	adjust(heap.size());
-
-	//cout << " -- del -- " << endl;
-	//print_heap();
-
-	// 3. adjust => n/2-1 번째 키
-
-	//adjust(heap.size());
 }
 
 int main(void) {
@@ -240,29 +176,25 @@ int main(void) {
 	readFile.open("queue.inp");
 	writeFile.open("queue.out");
 
-	//heap = new vector<Heap>;
-
 	string str;
 
-	int index = 0;
 	while(true) {
 		getline(readFile, str);
 
-		//cout << str << endl;
-
 		if (str == "q") {
-			return 0;
+			break;
 		}
 		else if (str == "d") {
 			del();
 		}
 
 		else if (str == "r") {
-			print_heap();
+			string str = print_heap();
+			writeFile << str << endl;
 		}
 		else {
 			int key = stoi(str);
-			insert(index++, key);
+			insert(heap.size(), key);
 		}
 
 	}

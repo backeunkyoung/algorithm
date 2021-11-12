@@ -1,2 +1,4 @@
 ﻿  queue.cpp
+D:\GitHub\algorithm\23.Priority Queue Simulator\23.PriorityQueueSimulator\23.PriorityQueueSimulator\queue.cpp(107,17): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+D:\GitHub\algorithm\23.Priority Queue Simulator\23.PriorityQueueSimulator\23.PriorityQueueSimulator\queue.cpp(146,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   23.PriorityQueueSimulator.vcxproj -> D:\GitHub\algorithm\23.Priority Queue Simulator\23.PriorityQueueSimulator\Debug\23.PriorityQueueSimulator.exe
